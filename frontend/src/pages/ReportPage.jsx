@@ -12,11 +12,12 @@ function ReportPage() {
   const [timeFound, setTimeFound] = useState("");
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [successful, setSuccessful] = useState("");
   const [email, setEmail] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
+    setEmail(localStorage.getItem("email"));
     if (!token) {
       navigate("/login");
     }
@@ -24,8 +25,7 @@ function ReportPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    
+    // console.log("Submitting form...");
     if (
       !productName ||
       !productDescription ||
@@ -39,7 +39,6 @@ function ReportPage() {
       return;
     }
 
-    
     try {
       const formData = new FormData();
       formData.append("product_name", productName);
@@ -50,20 +49,22 @@ function ReportPage() {
       formData.append("date_found", dateFound);
       formData.append("time_found", timeFound);
       formData.append("email", email);
-
+      // console.log("Form data:", formData);
+      const token = localStorage.getItem("token");
       const response = await fetch("http://127.0.0.1:8000/lost-product-ad/", {
         method: "POST",
         body: formData,
       });
-
+      // console.log("Response Status:", response.status);
       if (!response.ok) {
         throw new Error("Report failed. Please try again.");
       }
 
       const data = await response.json();
-      console.log("Report successful", data);
+      // console.log("Report successful", data);
       setError(""); // Clear error on success
-      alert("Report Submitted Successfully!");
+      setSuccessful("Report Submitted Successfully!");
+      // alert("Report Submitted Successfully!");
     } catch (err) {
       setError(err.message);
     }
@@ -71,12 +72,13 @@ function ReportPage() {
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userName");
     navigate("/login");
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="sticky top-0 bg-gray-100 z-10 p-4 flex justify-between items-center">
+    <div className="bg-gradient-to-b from-green-400  to-white min-h-screen">
+      <div className="sticky top-0  z-10 p-4 flex justify-between items-center">
         <div className="flex-grow"></div>
 
         <button
@@ -94,6 +96,11 @@ function ReportPage() {
           </h2>
           {error && (
             <p className="text-red-500 text-sm mb-2 text-center">{error}</p>
+          )}
+          {successful && (
+            <p className="text-green-500 text-sm mb-2 text-center">
+              {successful}
+            </p>
           )}
 
           <form onSubmit={handleSubmit}>
@@ -182,7 +189,7 @@ function ReportPage() {
                   <input
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    readOnly
                     className="w-full ml-2 p-2 border rounded-lg mt-1"
                   />
                 </div>

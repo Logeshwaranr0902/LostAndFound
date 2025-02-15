@@ -18,7 +18,9 @@ const LoginPage = () => {
     try {
       const response = await fetch("http://127.0.0.1:8000/login/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ email, password }),
       });
 
@@ -27,86 +29,77 @@ const LoginPage = () => {
       }
 
       const data = await response.json();
-      console.log("Login successful", data);
-      setError(""); // Clear error on success
+      setError("");
       setSuccessful("Login Successful!");
-
+      localStorage.setItem("email", data.email);
       localStorage.setItem("token", data.access_token);
+      localStorage.setItem("userName", data.user_name);
+      // console.log(data.access_token);
 
       setTimeout(() => {
         navigate("/choicepage");
-      }, 3000);
+      }, 2000);
     } catch (err) {
       setError(err.message);
     }
   };
 
   return (
-    <>
-      <div className="bg-black h-screen flex flex-col justify-center items-center">
-        {/* Website Name outside the login form */}
-        <div className="text-center mb-8">
-          <p className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-pink-500 to-blue-300">
-            Lost and Found
-          </p>
-        </div>
+    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-900 to-gray-900">
+      <div className="w-full max-w-md bg-white shadow-xl rounded-lg p-8">
+        <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-6">
+          Lost and Found
+        </h1>
+        <p className="text-lg font-semibold text-center text-gray-600 mb-6">
+          Login to your account
+        </p>
 
-        <div className="bg-cyan-900 w-96 rounded-2xl flex flex-col p-6">
-          <p className="text-white font-extrabold text-2xl text-center">
-            Login
-          </p>
-          {error && (
-            <p className="text-red-500 text-sm text-center mt-2">{error}</p>
-          )}
-          {successful && (
-            <p className="text-green-500 text-sm text-center mt-2">
-              {successful}
-            </p>
-          )}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {successful && (
+          <p className="text-green-500 text-center mb-4">{successful}</p>
+        )}
 
-          <form onSubmit={handleSubmit}>
-            <div className="mb-5"></div>
-            <label className="block text-white text-left ml-6 font-bold">
-              Email
-            </label>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-gray-700 font-semibold">Email</label>
             <input
-              type="text"
-              placeholder=" E-mail"
+              type="email"
+              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-72 rounded-lg ml-6 h-8 mt-4 p-2"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <div className="mb-5"></div>
-            <label className="block text-white text-left ml-6 font-bold">
+          </div>
+          <div>
+            <label className="block text-gray-700 font-semibold">
               Password
             </label>
             <input
               type="password"
-              placeholder=" Password"
+              placeholder="Enter your password"
               value={password}
-              className="w-72 rounded-lg ml-6 h-8 mt-4 p-2"
               onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <div className="my-8"></div>
-            <button
-              type="submit"
-              className="w-72 ml-6 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
-            >
-              Login
-            </button>
-          </form>
-          <p className="mt-4 text-center text-white">
-            Don't have an account?{" "}
-            <Link
-              to="/registerpage"
-              className="text-blue-500 hover:text-red-500"
-            >
-              Sign Up
-            </Link>
-          </p>
-        </div>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white font-bold p-3 rounded-lg hover:bg-blue-700 transition duration-300"
+          >
+            Login
+          </button>
+        </form>
+        <p className="mt-6 text-center text-gray-700">
+          Don't have an account?
+          <Link
+            to="/registerpage"
+            className="text-blue-500 hover:underline ml-1"
+          >
+            Sign Up
+          </Link>
+        </p>
       </div>
-    </>
+    </div>
   );
 };
 

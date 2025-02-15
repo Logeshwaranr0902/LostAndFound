@@ -48,13 +48,27 @@ INSTALLED_APPS = [
     'myapp',
     'rest_framework',
     'corsheaders',
+    
 ]
+
+
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  
 ]
 CORS_ALLOW_ALL_ORIGINS = True
-
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'email',  # Add this line to allow the email header
+]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

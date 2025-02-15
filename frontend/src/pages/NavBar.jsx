@@ -19,6 +19,16 @@ function NavBar() {
       {menuOpen && (
         <div className="fixed top-14 left-4 bg-white shadow-lg rounded-md p-4 flex flex-col space-y-2 z-50">
           <NavLink
+            to="/choicepage"
+            className={({ isActive }) =>
+              `px-4 py-2 rounded-md ${
+                isActive ? "bg-blue-600 text-white" : "bg-gray-200 text-black"
+              }`
+            }
+          >
+            Home Page
+          </NavLink>
+          <NavLink
             to="/findpage"
             className={({ isActive }) =>
               `px-4 py-2 rounded-md ${
@@ -38,7 +48,7 @@ function NavBar() {
           >
             Report Page
           </NavLink>
-          {/* <NavLink
+          <NavLink
             to="/reglostpage"
             className={({ isActive }) =>
               `px-4 py-2 rounded-md ${
@@ -47,7 +57,7 @@ function NavBar() {
             }
           >
             Lost Product Ad Page
-          </NavLink> */}
+          </NavLink>
         </div>
       )}
     </div>

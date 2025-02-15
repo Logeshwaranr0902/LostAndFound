@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 
@@ -12,6 +12,16 @@ function LostProductAdPage() {
   const [timeLost, setTimeLost] = useState("");
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
+  const [successful, setSuccessful] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setEmail(localStorage.getItem("email"));
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +50,7 @@ function LostProductAdPage() {
       formData.append("time_lost", timeLost);
       formData.append("email", email);
 
-      const response = await fetch("http://127.0.0.1:8000/lost-product-ad/", {
+      const response = await fetch("http://127.0.0.1:8000/reglostpage/", {
         method: "POST",
         body: formData,
       });
@@ -52,19 +62,21 @@ function LostProductAdPage() {
       const data = await response.json();
       console.log("Submission successful", data);
       setError(""); // Clear error on success
-      alert("Lost Product Ad Submitted Successfully!");
+
+      setSuccessful("Report Submitted Successfully!");
     } catch (err) {
       setError(err.message);
     }
   };
-  const navigate = useNavigate();
 
   const handleLogOut = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
     navigate("/login");
   };
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="sticky top-0 bg-gray-100 z-10 p-4 flex justify-between items-center">
+    <div className="bg-gradient-to-b from-red-400  to-white min-h-screen">
+      <div className="sticky top-0  z-10 p-4 flex justify-between items-center">
         <div className="flex-grow"></div>
 
         <button
@@ -82,6 +94,11 @@ function LostProductAdPage() {
           </h2>
           {error && (
             <p className="text-red-500 text-sm mb-2 text-center">{error}</p>
+          )}
+          {successful && (
+            <p className="text-green-500 text-sm mb-2 text-center">
+              {successful}
+            </p>
           )}
 
           <form onSubmit={handleSubmit}>
@@ -104,7 +121,7 @@ function LostProductAdPage() {
                     value={productDescription}
                     onChange={(e) => setProductDescription(e.target.value)}
                     className="w-full p-2 border rounded-lg mt-1"
-                    placeholder="Enter the product description (Include any relevant keywords to help find the product)"
+                    placeholder="Enter the product description (Include any relevant keywords to help find the product. Don't write as a sentence)"
                     rows="4"
                   ></textarea>
                 </div>
@@ -168,7 +185,7 @@ function LostProductAdPage() {
                   <input
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    readOnly
                     className="w-full ml-2 p-2 border rounded-lg mt-1"
                   />
                 </div>

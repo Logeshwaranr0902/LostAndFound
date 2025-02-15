@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ReportPage from "./pages/ReportPage";
 import FindPage from "./pages/FindPage";
 import RegLostPage from "./pages/RegLostPage";
+import HomePage from "./pages/homePage";
 
 const App = () => {
   return (
@@ -17,7 +18,8 @@ const App = () => {
           <Route path="/Registerpage" element={<RegisterPage />} />
           <Route path="/ReportPage" element={<ReportPage />} />
           <Route path="/FindPage" element={<FindPage />} />
-          {/* <Route path="/RegLostPage" element={<RegLostPage />} /> */}
+          <Route path="/RegLostPage" element={<RegLostPage />} />
+          <Route path="/" element={<HomePage />} />
         </Routes>
       </Router>
     </>

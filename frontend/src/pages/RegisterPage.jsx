@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function RegisterPage() {
+const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -9,13 +9,12 @@ function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [successful, setsuccessful] = useState("");
+  const [successful, setSuccessful] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
     if (
       !name ||
       !email ||
@@ -27,17 +26,16 @@ function RegisterPage() {
       setError("All fields are required!");
       return;
     }
-
     if (password !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
     if (password.length < 8) {
-      setError("Password is too short");
+      setError("Password must be at least 8 characters long");
       return;
     }
-    if (phone.length != 10) {
-      setError("Enter a valid number");
+    if (phone.length !== 10) {
+      setError("Enter a valid phone number");
       return;
     }
 
@@ -52,124 +50,92 @@ function RegisterPage() {
       if (!response.ok) {
         throw new Error(data.error || "Registration failed!");
       }
-      console.log("Registration successful", data);
-      setError(""); // Clear error on success
-      setsuccessful("Registration Successful");
+
+      setError("");
+      setSuccessful("Registration Successful!");
       setTimeout(() => {
         navigate("/login");
-      }, 3000);
+      }, 2000);
     } catch (err) {
       setError(err.message);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200">
-      <div className="bg-blue-950 p-6 rounded-lg shadow-lg w-[600px]">
-        <h2 className="text-2xl font-bold mb-4 text-center text-white">
-          Sign Up
-        </h2>
-        {error && (
-          <p className="text-red-500 text-sm mb-2 text-center">{error}</p>
-        )}
+    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-900 to-gray-900">
+      <div className="w-full max-w-md bg-white shadow-xl rounded-lg p-8">
+        <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-6">
+          Lost and Found
+        </h1>
+        <p className="text-lg font-semibold text-center text-gray-600 mb-6">
+          Create a new account
+        </p>
+
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         {successful && (
-          <p className="text-green-500 text-sm text-center mt-2">
-            {" "}
-            {successful}
-          </p>
+          <p className="text-green-500 text-center mb-4">{successful}</p>
         )}
-        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-          {/* Name Field */}
-          <div className="col-span-2">
-            <label className="block text-white">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full p-2 border rounded-lg mt-1"
-              placeholder="Enter your name"
-            />
-          </div>
 
-          {/* Email Field */}
-          <div className="col-span-2">
-            <label className="block text-white">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded-lg mt-1"
-              placeholder="Enter your email"
-            />
-          </div>
-
-          {/* Phone Number Field */}
-          <div>
-            <label className="block text-white">Phone Number</label>
-            <input
-              type="number"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full p-2 border rounded-lg mt-1"
-              placeholder="Enter your phone number"
-            />
-          </div>
-
-          {/* Address Field */}
-          <div className="col-span-2">
-            <label className="block text-white">Address</label>
-            <textarea
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="w-full p-2 border rounded-lg mt-1"
-              placeholder="Enter your address"
-              rows="3"
-            ></textarea>
-          </div>
-
-          {/* Password Field */}
-          <div>
-            <label className="block text-white">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded-lg mt-1"
-              placeholder="Enter your password"
-            />
-          </div>
-
-          {/* Confirm Password Field */}
-          <div>
-            <label className="block text-white">Confirm Password</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full p-2 border rounded-lg mt-1"
-              placeholder="Confirm your password"
-            />
-          </div>
-
-          <div className="col-span-2">
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
-            >
-              Sign Up
-            </button>
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="number"
+            placeholder="Phone Number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+          <textarea
+            placeholder="Address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            rows="2"
+          ></textarea>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white font-bold p-3 rounded-lg hover:bg-blue-700 transition duration-300"
+          >
+            Sign Up
+          </button>
         </form>
 
-        <p className="mt-4 text-center text-white">
-          Already have an account?{" "}
-          <Link to="/login" className="text-blue-500 hover:text-red-400">
+        <p className="mt-6 text-center text-gray-700">
+          Already have an account?
+          <Link to="/login" className="text-blue-500 hover:underline ml-1">
             Login
           </Link>
         </p>
       </div>
     </div>
   );
-}
+};
 
 export default RegisterPage;
