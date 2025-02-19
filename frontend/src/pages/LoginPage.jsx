@@ -34,7 +34,6 @@ const LoginPage = () => {
       localStorage.setItem("email", data.email);
       localStorage.setItem("token", data.access_token);
       localStorage.setItem("userName", data.user_name);
-      // console.log(data.access_token);
 
       setTimeout(() => {
         navigate("/choicepage");

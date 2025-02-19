@@ -4,7 +4,7 @@ import NavBar from "./NavBar";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 
 function CollapsibleCard({
-  id, // Add id as a prop
+  id,
   name,
   description,
   foundAt,
@@ -22,14 +22,14 @@ function CollapsibleCard({
   const [showPopup, setShowPopup] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   const [updatedProduct, setUpdatedProduct] = useState({
-    id, // Include id in the updatedProduct state
-    product_name: name, // Use product_name instead of name
-    product_description: description, // Use product_description instead of description
+    id,
+    product_name: name,
+    product_description: description,
     product_location: productlocation,
     product_category: productcategory,
   });
   const limit = 100;
-  // console.log(updatedProduct);
+
   const toggleExpand = () => setIsExpanded(!isExpanded);
   const handleClaimClick = () => setShowPopup(true);
   const closePopup = () => setShowPopup(false);
@@ -56,7 +56,7 @@ function CollapsibleCard({
 
   const handleUpdateSubmit = () => {
     console.log(updatedProduct);
-    onUpdate(updatedProduct); // Pass the updatedProduct object with id
+    onUpdate(updatedProduct);
     setShowUpdatePopup(false);
   };
 
@@ -140,7 +140,6 @@ function CollapsibleCard({
         </div>
       </div>
 
-      {/* Popup Modal for Claim Product */}
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -168,7 +167,6 @@ function CollapsibleCard({
         </div>
       )}
 
-      {/* Popup Modal for Update Product */}
       {showUpdatePopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -276,7 +274,6 @@ function FindPage() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      // Remove the deleted notification from the state
       setNotifications((prevNotifications) =>
         prevNotifications.filter(
           (notification) => notification.id !== notificationId
@@ -290,7 +287,7 @@ function FindPage() {
   useEffect(() => {
     fetchNotifications();
   }, []);
-  // Fetch products for the main page
+
   useEffect(() => {
     const fetchProducts = async () => {
       const token = localStorage.getItem("token");
@@ -309,7 +306,6 @@ function FindPage() {
     fetchProducts();
   }, [searchQuery, navigate]);
 
-  // Fetch inventory products
   const fetchInventoryProducts = async () => {
     try {
       const email = localStorage.getItem("email");
@@ -349,7 +345,7 @@ function FindPage() {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      fetchInventoryProducts(); // Refresh the inventory
+      fetchInventoryProducts();
       console.log("Lost product updated successfully");
     } catch (error) {
       console.error("Error updating lost product:", error);
@@ -376,7 +372,7 @@ function FindPage() {
       console.error("Error deleting lost product:", error);
     }
   };
-  // Handle update button click
+
   const handleUpdate = async (updatedProduct) => {
     try {
       const response = await fetch(
@@ -389,11 +385,11 @@ function FindPage() {
           body: JSON.stringify(updatedProduct),
         }
       );
-      // console.log("id is", updatedProduct);
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      // Refresh the inventory products after update
+
       fetchInventoryProducts();
       console.log("Product updated successfully");
     } catch (error) {
@@ -401,7 +397,6 @@ function FindPage() {
     }
   };
 
-  // Handle delete button click
   const handleDelete = async (productId) => {
     try {
       const response = await fetch(
@@ -488,7 +483,7 @@ function FindPage() {
             Logout
           </button>
         </div>
-        {/* Notification Popup */}
+
         {showNotifications && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -545,13 +540,11 @@ function FindPage() {
       </div>
       <NavBar />
 
-      {/* Inventory Popup */}
       {showInventoryPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-3/4 max-h-screen overflow-y-auto">
             <h2 className="text-2xl font-bold mb-4">Inventory</h2>
 
-            {/* Reported Products Section */}
             <div className="mb-8">
               <h3 className="text-xl font-bold mb-4">Reported Products</h3>
               <div className="flex flex-col justify-center items-center">
@@ -580,7 +573,6 @@ function FindPage() {
               </div>
             </div>
 
-            {/* Lost Products Section */}
             <div className="mb-8">
               <h3 className="text-xl font-bold mb-4">My Lost Products</h3>
               <div className="flex flex-col justify-center items-center">

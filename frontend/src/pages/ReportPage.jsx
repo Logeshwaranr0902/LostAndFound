@@ -25,7 +25,6 @@ function ReportPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log("Submitting form...");
     if (
       !productName ||
       !productDescription ||
@@ -49,22 +48,19 @@ function ReportPage() {
       formData.append("date_found", dateFound);
       formData.append("time_found", timeFound);
       formData.append("email", email);
-      // console.log("Form data:", formData);
+
       const token = localStorage.getItem("token");
       const response = await fetch("http://127.0.0.1:8000/lost-product-ad/", {
         method: "POST",
         body: formData,
       });
-      // console.log("Response Status:", response.status);
       if (!response.ok) {
         throw new Error("Report failed. Please try again.");
       }
 
       const data = await response.json();
-      // console.log("Report successful", data);
-      setError(""); // Clear error on success
+      setError("");
       setSuccessful("Report Submitted Successfully!");
-      // alert("Report Submitted Successfully!");
     } catch (err) {
       setError(err.message);
     }
@@ -158,7 +154,10 @@ function ReportPage() {
                   <label className="block">Product Image</label>
                   <input
                     type="file"
-                    onChange={(e) => setProductImage(e.target.files[0])}
+                    onChange={(e) => {
+                      console.log("Selected File:", e.target.files[0]);
+                      setProductImage(e.target.files[0]);
+                    }}
                     className="w-full p-2 border rounded-lg mt-1"
                     placeholder="Upload the image of the product"
                   />

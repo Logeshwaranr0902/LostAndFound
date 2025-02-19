@@ -41,13 +41,17 @@ def login(request):
 
 @api_view(["POST"])
 def create_lost_product_ad(request):
-    
+   
     email = request.data.get('email')
-
     if email:
         user = User.objects.filter(email=email).first()
+        
+    if 'product_image' not in request.FILES:
+        return Response({"error": "Image is required."}, status=status.HTTP_400_BAD_REQUEST)
+    
     serializer = LostProductAdSerializer(data=request.data)
     if serializer.is_valid():
+        
         serializer.save(user=user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -110,7 +114,6 @@ def reglostpage(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# views.py
 @api_view(["GET"])
 def get_notifications(request):
     email = request.headers.get('email') or request.query_params.get('email')
@@ -127,27 +130,27 @@ def get_notifications(request):
 
 @api_view(["GET"])
 def inventory_view(request):
-    # Retrieve the email from the request headers or query parameters
+    
     email = request.headers.get('email') or request.query_params.get('email')
     
     if not email:
         return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        # Find the user with the given email
+        
         user = User.objects.get(email=email)
         
-        # Fetch all LostProductAd entries associated with this user (reported ads)
+        
         reported_products = LostProductAd.objects.filter(user=user)
         
-        # Fetch all LostProductAdSelf entries associated with this user (user's lost product ads)
+        
         lost_products = LostProductAdSelf.objects.filter(user=user)
         
-        # Serialize the data
+        
         reported_serializer = LostProductAdSerializer(reported_products, many=True)
         lost_serializer = LostProductAdSelfSerializer(lost_products, many=True)
         
-        # Return the serialized data
+        
         return Response({
             "reported_products": reported_serializer.data,
             "lost_products": lost_serializer.data,
@@ -173,7 +176,7 @@ def update_lost_product(request, id):
     except LostProductAd.DoesNotExist:
         return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
     
-# views.py
+
 @api_view(["GET"])
 def check_for_matches(request):
     email = request.headers.get('email') or request.query_params.get('email')
@@ -183,7 +186,7 @@ def check_for_matches(request):
     try:
         user = User.objects.get(email=email)
         
-        # Fetch all lost and found products
+        
         lost_products = LostProductAdSelf.objects.filter(user=user)
         found_products = LostProductAd.objects.all()
 
@@ -191,13 +194,12 @@ def check_for_matches(request):
 
         for lost_product in lost_products:
             for found_product in found_products:
-                # Check for matches based on product name, category, or location
                 if (
                     lost_product.product_name.lower() in found_product.product_name.lower() or
                     lost_product.product_category.lower() == found_product.product_category.lower() or
                     lost_product.product_location.lower() == found_product.product_location.lower()
                 ):
-                    # Create a notification for the user
+                    
                     Notification.objects.create(
                         user=user,
                         message=f"A similar product '{found_product.product_name}' was found in the inventory."

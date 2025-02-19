@@ -5,25 +5,19 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = "__all__"
-
-
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    password = serializers.CharField()
-    
+    password = serializers.CharField()    
 class LostProductAdSerializer(serializers.ModelSerializer):
     class Meta:
         model = LostProductAd
         fields = "__all__"
-        read_only_fields = ['user', 'product_image']  # Make product_image read-only
+        read_only_fields = ['user']  
 class LostProductAdSelfSerializer(serializers.ModelSerializer):
     class Meta:
         model = LostProductAdSelf
         fields = "__all__"
-        read_only_fields = ['user', 'product_image']  # Make product_image read-only
-
-
-# serializers.py
+        read_only_fields = ['user']          
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification

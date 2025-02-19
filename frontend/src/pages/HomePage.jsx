@@ -6,17 +6,12 @@ const HomePage = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-900 to-gray-900">
       <div className="text-center text-white px-4">
-        {/* Main Title */}
         <h1 className="text-6xl  font-extrabold mb-6 animate__animated animate__fadeIn animate__delay-1s">
           Lost & Found
         </h1>
-
-        {/* Slogan */}
         <h2 className="text-3xl  font-semibold mb-10 animate__animated animate__fadeIn animate__delay-2s">
           Where lost things find their way back
         </h2>
-
-        {/* Buttons */}
         <div className="flex justify-center space-x-6">
           <button
             onClick={() => navigate("/login")}
